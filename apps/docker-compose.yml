@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: rentiva_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: rentiva
+      POSTGRES_PASSWORD: rentiva123
+      POSTGRES_DB: rentiva_db
+    volumes:
+    
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
