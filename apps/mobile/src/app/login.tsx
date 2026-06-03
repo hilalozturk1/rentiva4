@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ScrollView, View, TextInput, Pressable, Text, StyleSheet, Alert } from "react-native";
 import { router, Link } from "expo-router";
 import { apiFetch } from "../lib/api";
+import { setUser } from "../lib/storage";
 import { colors, radius } from "../theme";
 
 export default function Login() {
@@ -10,11 +11,12 @@ export default function Login() {
 
   async function submit() {
     try {
-      await apiFetch('/auth/login', {
+      const data = await apiFetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
 
+      setUser(data.user);
       router.push('/cars');
     } catch (err: any) {
       Alert.alert('Hata', err.message);
