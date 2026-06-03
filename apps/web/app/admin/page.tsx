@@ -1,7 +1,7 @@
 import { apiFetch } from "../src/lib/api";
 
 export default async function AdminPage() {
-  const bookings = await apiFetch("/bookings");
+  const bookings: { id: string; car?: { brand: string; model: string }; guest?: { name: string }; totalPrice: number; status: string }[] = await apiFetch("/bookings");
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10">

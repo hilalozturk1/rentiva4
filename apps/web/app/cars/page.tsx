@@ -2,7 +2,7 @@ import Link from "next/link";
 import { apiFetch } from "../src/lib/api"; // Ensure this path is correct based on your project structure
 
 export default async function CarsPage() {
-  const cars = await apiFetch("/cars");
+  const cars: { id: string; brand: string; model: string; city: string; district: string; dailyPrice: number }[] = await apiFetch("/cars");
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10">
@@ -20,7 +20,7 @@ export default async function CarsPage() {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-3">
-          {cars.map((car :any) => (
+          {cars.map((car : { id: string; brand: string; model: string; city: string; district: string; dailyPrice: number }) => (
             <Link key={car.id} href={`/cars/${car.id}`} className="card">
               <div className="mb-4 h-48 rounded-3xl bg-zinc-200" />
               <h2 className="text-2xl font-black">

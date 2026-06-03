@@ -23,7 +23,7 @@ export async function apiFetch<T>(
 
     return data;
   } catch (error) {
-    console.error("API fetch failed:", {
+    console.log("API fetch failed:", {
       url: `${API_URL}${path}`,
       error,
     });

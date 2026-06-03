@@ -28,7 +28,7 @@ services:
     container_name: rentiva_postgres
     environment:
       POSTGRES_USER: rentiva
-      POSTGRES_PASSWORD: CHANGE_ME
+      POSTGRES_PASSWORD: npg_kVbAM16dyIPt
       POSTGRES_DB: rentiva_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
