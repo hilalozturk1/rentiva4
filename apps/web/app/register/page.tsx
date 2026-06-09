@@ -3,27 +3,44 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { apiFetch } from "../src/lib/api"; // Ensure this path is correct based on your project structure
+import { apiFetch } from "../src/lib/api";
 
 export default function RegisterPage() {
   const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+
+    const payload = {
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      password,
+      role: "RENTER",
+    };
+
+    if (!payload.name) {
+      setError("Ad soyad zorunludur.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       await apiFetch("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ name, email, phone, password, role: "GUEST" }),
+        body: JSON.stringify(payload),
       });
+
       router.push("/cars");
     } catch (err: any) {
       setError(err.message || "Kayıt sırasında bir hata oluştu.");
@@ -36,9 +53,13 @@ export default function RegisterPage() {
     <main className="mx-auto max-w-xl px-6 py-16">
       <div className="rounded-[32px] border border-zinc-200 bg-white p-10 shadow-xl">
         <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-yellow-600">Rentiva</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-yellow-600">
+            Rentiva
+          </p>
           <h1 className="mt-4 text-4xl font-black">Kayıt Ol</h1>
-          <p className="mt-3 text-zinc-500">Hemen başlayın, aracınızı listeleyin ya da kiralık araç keşfedin.</p>
+          <p className="mt-3 text-zinc-500">
+            Hemen başlayın, aracınızı listeleyin ya da kiralık araç keşfedin.
+          </p>
         </div>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
@@ -97,7 +118,7 @@ export default function RegisterPage() {
         </form>
 
         <p className="mt-6 text-center text-sm text-zinc-500">
-          Zaten hesabın var mı?{' '}
+          Zaten hesabın var mı?{" "}
           <Link href="/login" className="font-semibold text-black hover:underline">
             Giriş Yap
           </Link>
