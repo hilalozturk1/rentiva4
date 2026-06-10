@@ -5,7 +5,7 @@ export async function apiFetch<T>(
   options?: RequestInit
 ): Promise<T> {
   try {
-    const res = await fetch(`${API_URL}${path}`, {
+    const res = await fetch(`${API_URL }${path}`, {
       headers: {
         "Content-Type": "application/json",
         ...(options?.headers || {}),
