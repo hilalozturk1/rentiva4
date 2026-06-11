@@ -1,25 +1,82 @@
-﻿import Link from "next/link";
+﻿'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const role = localStorage.getItem('userRole');
+
+    setIsLoggedIn(!!token);
+    setUserRole(role);
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('selectedBookingId');
+
+    setIsLoggedIn(false);
+    setUserRole(null);
+
+    window.location.href = '/';
+  }
+
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4">
-        <Link href="/" className="text-2xl font-black">
-          Rentiva
+    <nav className="bg-white shadow px-6 py-4 flex justify-between items-center">
+      <Link href="/" className="text-2xl font-bold text-blue-600">
+        Gesrent
+      </Link>
+
+      <div className="flex items-center gap-4">
+        <Link href="/vehicles" className="hover:text-blue-600">
+          Araçlar
         </Link>
 
-        <nav className="flex flex-wrap items-center gap-4 text-sm font-semibold">
-          <Link href="/cars">Araçlar</Link>
-          <Link href="/host/cars/new">Araç Listele</Link>
-          <Link href="/admin">Admin</Link>
-          <Link href="/login" className="rounded-full bg-black px-4 py-2 text-white">
-            Giriş
-          </Link>
-          <Link href="/register" className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-50">
-            Kayıt Ol
-          </Link>
-        </nav>
+        {isLoggedIn ? (
+          <>
+            <Link href="/reservations" className="hover:text-blue-600">
+              Rezervasyonlarım
+            </Link>
+
+            {(userRole === 'OWNER' || userRole === 'ADMIN') && (
+              <Link href="/profile/vehicles" className="hover:text-blue-600">
+                Araçlarım
+              </Link>
+            )}
+
+            <Link href="/profile" className="hover:text-blue-600">
+              Profilim
+            </Link>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg"
+            >
+              Çıkış Yap
+            </button>
+          </>
+        ) : (
+          <>
+            <Link href="/login" className="hover:text-blue-600">
+              Giriş Yap
+            </Link>
+
+            <Link
+              href="/register"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+            >
+              Kayıt Ol
+            </Link>
+          </>
+        )}
       </div>
-    </header>
+    </nav>
   );
 }
